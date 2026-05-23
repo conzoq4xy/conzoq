@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CONZOQ – Scratch &amp; Win</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #FEFEFA; font-family: Georgia, serif; }
+    input::placeholder { color: #ccc; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(12px) } to { opacity:1; transform:none } }
+    @keyframes winPop { from { opacity:0; transform:scale(0.75) } to { opacity:1; transform:scale(1) } }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _slicedToArray(r, e) { return _arrayWithHoles(r) || _iterableToArrayLimit(r, e) || _unsupportedIterableToArray(r, e) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t.return && (u = t.return(), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(r) { if (Array.isArray(r)) return r; }
+var _React = React,
+  useState = _React.useState,
+  useRef = _React.useRef,
+  useEffect = _React.useEffect,
+  useCallback = _React.useCallback;
+function Confetti(_ref) {
+  var onDone = _ref.onDone;
+  var ref = useRef(null);
+  useEffect(function () {
+    var canvas = ref.current;
+    var ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    var colors = ["#003262", "#FFD700", "#FF69B4", "#00BFFF", "#FF6347", "#90EE90", "#DDA0DD", "#FFA500"];
+    var pts = Array.from({
+      length: 180
+    }, function () {
+      return {
+        x: Math.random() * canvas.width,
+        y: -Math.random() * canvas.height * 0.8,
+        w: Math.random() * 14 + 5,
+        h: Math.random() * 8 + 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * 360,
+        vx: (Math.random() - 0.5) * 5,
+        vy: Math.random() * 4 + 2,
+        vr: (Math.random() - 0.5) * 10,
+        circle: Math.random() > 0.55
+      };
+    });
+    var frame;
+    var _draw = function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      pts.forEach(function (p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        if (p.circle) {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        ctx.restore();
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        if (p.y > canvas.height) {
+          p.y = -30;
+          p.x = Math.random() * canvas.width;
+        }
+      });
+      frame = requestAnimationFrame(_draw);
+    };
+    _draw();
+    var timer = setTimeout(function () {
+      cancelAnimationFrame(frame);
+      onDone && onDone();
+    }, 5000);
+    return function () {
+      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+    };
+  }, []);
+  return /*#__PURE__*/React.createElement("canvas", {
+    ref: ref,
+    style: {
+      position: "fixed",
+      inset: 0,
+      pointerEvents: "none",
+      zIndex: 9999
+    }
+  });
+}
+function ScratchCanvas(_ref2) {
+  var offerLabel = _ref2.offerLabel,
+    offerDetail = _ref2.offerDetail,
+    onRevealed = _ref2.onRevealed;
+  var canvasRef = useRef(null);
+  var isDrawing = useRef(false);
+  var isDone = useRef(false);
+  var isAnimating = useRef(false);
+  useEffect(function () {
+    var canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    canvas.width = 340;
+    canvas.height = 200;
+    ctx.fillStyle = "#003262";
+    ctx.fillRect(0, 0, 340, 200);
+    ctx.strokeStyle = "rgba(255,255,255,0.06)";
+    ctx.lineWidth = 1;
+    for (var i = -200; i < 560; i += 20) {
+      ctx.beginPath();
+      ctx.moveTo(i, 0);
+      ctx.lineTo(i + 200, 200);
+      ctx.stroke();
+    }
+    for (var x = 16; x < 340; x += 28) for (var y = 16; y < 200; y += 28) {
+      ctx.beginPath();
+      ctx.arc(x, y, 1.3, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255,255,255,0.1)";
+      ctx.fill();
+    }
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.lineWidth = 1.5;
+    ctx.roundRect(10, 10, 320, 180, 12);
+    ctx.stroke();
+    ctx.save();
+    ctx.globalAlpha = 0.07;
+    ctx.font = "bold 54px Georgia, serif";
+    ctx.fillStyle = "#fff";
+    ctx.textAlign = "center";
+    ctx.fillText("CONZOQ", 170, 118);
+    ctx.restore();
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 20px Georgia, serif";
+    ctx.fillText("✦ Scratch Here ✦", 170, 86);
+    ctx.font = "13px Georgia, serif";
+    ctx.fillStyle = "rgba(255,255,255,0.65)";
+    ctx.fillText("Your special offer is hidden inside!", 170, 116);
+    ctx.font = "10px Georgia, serif";
+    ctx.fillStyle = "rgba(255,255,255,0.28)";
+    ctx.fillText("CONZOQ", 170, 165);
+  }, []);
+  var autoReveal = useCallback(function () {
+    if (isAnimating.current) return;
+    isAnimating.current = true;
+    var canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    var step = 0;
+    var totalSteps = 20;
+    var _animate = function animate() {
+      step++;
+      ctx.clearRect(0, 0, step / totalSteps * canvas.width, canvas.height);
+      if (step < totalSteps) requestAnimationFrame(_animate);else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        onRevealed && onRevealed();
+      }
+    };
+    requestAnimationFrame(_animate);
+  }, [onRevealed]);
+  var getPos = function getPos(e) {
+    var canvas = canvasRef.current;
+    var rect = canvas.getBoundingClientRect();
+    var sx = canvas.width / rect.width,
+      sy = canvas.height / rect.height;
+    var cx = e.touches ? e.touches[0].clientX : e.clientX;
+    var cy = e.touches ? e.touches[0].clientY : e.clientY;
+    return {
+      x: (cx - rect.left) * sx,
+      y: (cy - rect.top) * sy
+    };
+  };
+  var doScratch = useCallback(function (e) {
+    if (!isDrawing.current || isDone.current) return;
+    e.preventDefault();
+    var canvas = canvasRef.current;
+    var ctx = canvas.getContext("2d");
+    var _getPos = getPos(e),
+      x = _getPos.x,
+      y = _getPos.y;
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.beginPath();
+    ctx.arc(x, y, 26, 0, Math.PI * 2);
+    ctx.fill();
+    var d = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    var transparent = 0,
+      total = 0;
+    for (var i = 3; i < d.length; i += 32) {
+      if (d[i] === 0) transparent++;
+      total++;
+    }
+    if (transparent / total > 0.5) {
+      isDone.current = true;
+      autoReveal();
+    }
+  }, [autoReveal]);
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "relative",
+      width: 340,
+      height: 200,
+      borderRadius: 20,
+      overflow: "hidden",
+      cursor: "crosshair",
+      boxShadow: "0 8px 36px rgba(0,50,98,0.22), 0 0 0 1.5px rgba(0,50,98,0.12)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      position: "absolute",
+      inset: 0,
+      background: "#FEFEFA",
+      borderRadius: 20,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 5
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      letterSpacing: 4,
+      color: "#003262",
+      textTransform: "uppercase",
+      opacity: 0.4
+    }
+  }, "\uD83C\uDF81 Your Reward"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 36,
+      fontWeight: "bold",
+      color: "#003262",
+      letterSpacing: 1,
+      textAlign: "center",
+      padding: "0 20px"
+    }
+  }, offerLabel), offerDetail && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 14,
+      color: "#003262",
+      opacity: 0.65,
+      textAlign: "center",
+      padding: "0 16px"
+    }
+  }, offerDetail), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 10,
+      color: "#003262",
+      opacity: 0.22,
+      marginTop: 2,
+      letterSpacing: 3
+    }
+  }, "CONZOQ")), /*#__PURE__*/React.createElement("canvas", {
+    ref: canvasRef,
+    style: {
+      position: "absolute",
+      inset: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: 20,
+      touchAction: "none"
+    },
+    onMouseDown: function onMouseDown() {
+      return isDrawing.current = true;
+    },
+    onMouseUp: function onMouseUp() {
+      return isDrawing.current = false;
+    },
+    onMouseLeave: function onMouseLeave() {
+      return isDrawing.current = false;
+    },
+    onMouseMove: doScratch,
+    onTouchStart: function onTouchStart(e) {
+      e.preventDefault();
+      isDrawing.current = true;
+    },
+    onTouchEnd: function onTouchEnd() {
+      return isDrawing.current = false;
+    },
+    onTouchMove: doScratch
+  }));
+}
+var DEFAULT_OFFERS = [{
+  label: "20% OFF",
+  detail: "All Products"
+}, {
+  label: "50% OFF",
+  detail: "Delivery Charge"
+}, {
+  label: "15% OFF",
+  detail: "All Bracelet Items"
+}, {
+  label: "FREE GIFT",
+  detail: "With Every Purchase"
+}, {
+  label: "BUY 2 GET 1",
+  detail: "Free on Earrings"
+}];
+function CreatorView(_ref3) {
+  var onPreview = _ref3.onPreview;
+  var _useState = useState(DEFAULT_OFFERS),
+    _useState2 = _slicedToArray(_useState, 2),
+    offers = _useState2[0],
+    setOffers = _useState2[1];
+  var _useState3 = useState(""),
+    _useState4 = _slicedToArray(_useState3, 2),
+    link = _useState4[0],
+    setLink = _useState4[1];
+  var _useState5 = useState(false),
+    _useState6 = _slicedToArray(_useState5, 2),
+    copied = _useState6[0],
+    setCopied = _useState6[1];
+  var updateOffer = function updateOffer(i, field, val) {
+    return setOffers(offers.map(function (o, idx) {
+      return idx === i ? _objectSpread(_objectSpread({}, o), {}, _defineProperty({}, field, val)) : o;
+    }));
+  };
+  var addOffer = function addOffer() {
+    if (offers.length < 8) setOffers([].concat(_toConsumableArray(offers), [{
+      label: "",
+      detail: ""
+    }]));
+  };
+  var removeOffer = function removeOffer(i) {
+    if (offers.length > 2) setOffers(offers.filter(function (_, idx) {
+      return idx !== i;
+    }));
+  };
+  var generate = function generate() {
+    var valid = offers.filter(function (o) {
+      return o.label.trim();
+    });
+    if (!valid.length) return;
+    setLink(window.location.origin + window.location.pathname + "#card?" + "offers=" + encodeURIComponent(JSON.stringify(valid)));
+  };
+  var copy = function copy() {
+    navigator.clipboard.writeText(link).catch(function () {});
+    setCopied(true);
+    setTimeout(function () {
+      return setCopied(false);
+    }, 2500);
+  };
+  var inp = function inp(extra) {
+    return _objectSpread({
+      padding: "10px 14px",
+      borderRadius: 10,
+      border: "1.5px solid #e0e0e0",
+      background: "#fff",
+      color: "#000",
+      fontSize: 14,
+      outline: "none",
+      transition: "border-color 0.2s"
+    }, extra);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "100%",
+      maxWidth: 480,
+      padding: "24px 16px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: "center",
+      marginBottom: 28
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      letterSpacing: 6,
+      color: "#003262",
+      textTransform: "uppercase",
+      marginBottom: 6,
+      opacity: 0.5
+    }
+  }, "CONZOQ"), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: 24,
+      color: "#000",
+      margin: 0
+    }
+  }, "Random Scratch Card"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: "#666",
+      fontSize: 13,
+      margin: "6px 0 0"
+    }
+  }, "Add your offers \u2014 each customer gets a random one")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, offers.map(function (o, i) {
+    return /*#__PURE__*/React.createElement("div", {
+      key: i,
+      style: {
+        display: "flex",
+        gap: 8,
+        alignItems: "center"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 24,
+        height: 24,
+        borderRadius: "50%",
+        background: "#003262",
+        color: "#fff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: 11,
+        flexShrink: 0
+      }
+    }, i + 1), /*#__PURE__*/React.createElement("input", {
+      style: _objectSpread(_objectSpread({}, inp()), {}, {
+        flex: "0 0 130px"
+      }),
+      placeholder: "e.g. 20% OFF",
+      value: o.label,
+      onChange: function onChange(e) {
+        return updateOffer(i, "label", e.target.value);
+      },
+      onFocus: function onFocus(e) {
+        return e.target.style.borderColor = "#003262";
+      },
+      onBlur: function onBlur(e) {
+        return e.target.style.borderColor = "#e0e0e0";
+      }
+    }), /*#__PURE__*/React.createElement("input", {
+      style: _objectSpread(_objectSpread({}, inp()), {}, {
+        flex: 1
+      }),
+      placeholder: "e.g. All Products",
+      value: o.detail,
+      onChange: function onChange(e) {
+        return updateOffer(i, "detail", e.target.value);
+      },
+      onFocus: function onFocus(e) {
+        return e.target.style.borderColor = "#003262";
+      },
+      onBlur: function onBlur(e) {
+        return e.target.style.borderColor = "#e0e0e0";
+      }
+    }), /*#__PURE__*/React.createElement("button", {
+      onClick: function onClick() {
+        return removeOffer(i);
+      },
+      style: {
+        width: 28,
+        height: 28,
+        borderRadius: "50%",
+        border: "1.5px solid #ddd",
+        background: "#fff",
+        color: "#bbb",
+        cursor: "pointer",
+        fontSize: 16,
+        flexShrink: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, "\xD7"));
+  })), /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 10,
+      marginBottom: 14
+    }
+  }, offers.length < 8 && /*#__PURE__*/React.createElement("button", {
+    onClick: addOffer,
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 10,
+      border: "1.5px dashed #003262",
+      background: "#fff",
+      color: "#003262",
+      fontSize: 13,
+      cursor: "pointer"
+    }
+  }, "+ Add Offer"), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return onPreview(offers.filter(function (o) {
+        return o.label.trim();
+      }));
+    },
+    style: {
+      flex: 1,
+      padding: "10px",
+      borderRadius: 10,
+      border: "1.5px solid #003262",
+      background: "#fff",
+      color: "#003262",
+      fontSize: 13,
+      cursor: "pointer"
+    }
+  }, "\uD83D\uDC41 Preview")), /*#__PURE__*/React.createElement("button", {
+    onClick: generate,
+    style: {
+      width: "100%",
+      padding: "14px",
+      borderRadius: 12,
+      border: "none",
+      background: "#003262",
+      color: "#fff",
+      fontSize: 16,
+      cursor: "pointer",
+      boxShadow: "0 4px 16px rgba(0,50,98,0.22)"
+    }
+  }, "\u2728 Generate Shareable Link"), link && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 14,
+      background: "#f5f5f0",
+      borderRadius: 14,
+      padding: 16,
+      border: "1.5px solid #e8e8e0",
+      animation: "fadeUp 0.4s ease"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#003262",
+      marginBottom: 6,
+      letterSpacing: 2
+    }
+  }, "\u2713 LINK READY \u2014 Share with anyone"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#888",
+      wordBreak: "break-all",
+      fontFamily: "monospace",
+      marginBottom: 12,
+      lineHeight: 1.7
+    }
+  }, link), /*#__PURE__*/React.createElement("button", {
+    onClick: copy,
+    style: {
+      width: "100%",
+      padding: "11px",
+      borderRadius: 10,
+      border: "1.5px solid #003262",
+      background: copied ? "#003262" : "#fff",
+      color: copied ? "#fff" : "#003262",
+      fontSize: 14,
+      cursor: "pointer"
+    }
+  }, copied ? "✓ Copied!" : "📋 Copy Link")));
+}
+function CustomerView(_ref4) {
+  var offers = _ref4.offers;
+  var _useState7 = useState(function () {
+      var v = offers.filter(function (o) {
+        return o.label;
+      });
+      return v[Math.floor(Math.random() * v.length)] || {
+        label: "Special Offer",
+        detail: ""
+      };
+    }),
+    _useState8 = _slicedToArray(_useState7, 1),
+    offer = _useState8[0];
+  var _useState9 = useState(false),
+    _useState0 = _slicedToArray(_useState9, 2),
+    won = _useState0[0],
+    setWon = _useState0[1];
+  var _useState1 = useState(false),
+    _useState10 = _slicedToArray(_useState1, 2),
+    showConfetti = _useState10[0],
+    setShowConfetti = _useState10[1];
+  var handleRevealed = function handleRevealed() {
+    setWon(true);
+    setShowConfetti(true);
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "100%",
+      maxWidth: 420,
+      textAlign: "center",
+      padding: "24px 16px"
+    }
+  }, showConfetti && /*#__PURE__*/React.createElement(Confetti, {
+    onDone: function onDone() {
+      return setShowConfetti(false);
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginBottom: 26
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      letterSpacing: 6,
+      color: "#003262",
+      textTransform: "uppercase",
+      marginBottom: 8,
+      opacity: 0.45
+    }
+  }, "CONZOQ"), /*#__PURE__*/React.createElement("h1", {
+    style: {
+      fontSize: 21,
+      color: "#000",
+      margin: 0
+    }
+  }, won ? "🎉 Congratulations!" : "Scratch this card to get exciting offer."), !won && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: "#777",
+      fontSize: 13,
+      margin: "8px 0 0"
+    }
+  }, "Scratch the card below \uD83D\uDC47")), /*#__PURE__*/React.createElement(ScratchCanvas, {
+    offerLabel: offer.label,
+    offerDetail: offer.detail,
+    onRevealed: handleRevealed
+  }), !won && /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: "#bbb",
+      fontSize: 12,
+      marginTop: 10
+    }
+  }, "Use your finger or mouse to scratch"), won && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 22,
+      animation: "winPop 0.6s cubic-bezier(0.34,1.56,0.64,1)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "#f0f4f8",
+      border: "1.5px solid #ccd8e8",
+      borderRadius: 16,
+      padding: "20px 24px",
+      marginBottom: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: "#003262",
+      letterSpacing: 2,
+      marginBottom: 8,
+      opacity: 0.5,
+      textTransform: "uppercase"
+    }
+  }, "You Won"), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 34,
+      color: "#003262",
+      fontWeight: "bold"
+    }
+  }, offer.label), offer.detail && /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 15,
+      color: "#003262",
+      marginTop: 5,
+      opacity: 0.7
+    }
+  }, offer.detail)), /*#__PURE__*/React.createElement("p", {
+    style: {
+      color: "#666",
+      fontSize: 13,
+      margin: 0
+    }
+  }, "Mention this offer when placing your order.", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: "#aaa"
+    }
+  }, "Thank you for shopping with CONZOQ \u2764\uFE0F"))));
+}
+function App() {
+  var _useState11 = useState(null),
+    _useState12 = _slicedToArray(_useState11, 2),
+    preview = _useState12[0],
+    setPreview = _useState12[1];
+  var hash = window.location.hash;
+  var isCard = hash.startsWith("#card?");
+  var cardOffers = null;
+  if (isCard) {
+    try {
+      cardOffers = JSON.parse(decodeURIComponent(new URLSearchParams(hash.replace("#card?", "")).get("offers") || "[]"));
+    } catch (e) {}
+  }
+  var view = preview ? "preview" : isCard && cardOffers && cardOffers.length ? "customer" : "creator";
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      minHeight: "100vh",
+      background: "#FEFEFA",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, view === "creator" && /*#__PURE__*/React.createElement(CreatorView, {
+    onPreview: setPreview
+  }), view === "preview" && /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: "100%",
+      maxWidth: 440,
+      padding: "24px 16px"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      return setPreview(null);
+    },
+    style: {
+      background: "none",
+      border: "1.5px solid #003262",
+      color: "#003262",
+      borderRadius: 8,
+      padding: "6px 14px",
+      cursor: "pointer",
+      fontSize: 13,
+      marginBottom: 20
+    }
+  }, "\u2190 Back"), /*#__PURE__*/React.createElement(CustomerView, {
+    offers: preview
+  })), view === "customer" && cardOffers && /*#__PURE__*/React.createElement(CustomerView, {
+    offers: cardOffers
+  }));
+}
+ReactDOM.createRoot(document.getElementById("root")).render(/*#__PURE__*/React.createElement(App, null));
+</script>
+</body>
+</html>
